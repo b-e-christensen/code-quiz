@@ -1,0 +1,34 @@
+body {
+    background-color: #b7422d;
+}
+
+main {
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#quiz {
+    text-align: left;
+    background-color: #8bbef3;
+    color: #b7422d;
+    height: 300px;
+    width: 300px;
+
+}
+
+#question {
+    font-size: 25px;
+    border-bottom: #b7422d dashed 2px;
+    margin: 5px;
+}
+
+#answer {
+    font-size: 20px;
+    display: flex;
+    align-items: space-evenly;
+}
