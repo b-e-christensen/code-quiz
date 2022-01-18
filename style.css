@@ -1,5 +1,5 @@
 body {
-    background-color: #b7422d;
+    background-color: #333;
 }
 
 main {
@@ -12,23 +12,50 @@ main {
 
 }
 
+#timer {
+    font-size: 25px;
+    display: none;
+}
+
 #quiz {
     text-align: left;
     background-color: #8bbef3;
     color: #b7422d;
     height: 300px;
-    width: 300px;
+    width: 500px;
 
 }
 
 #question {
+    display: flex;
     font-size: 25px;
     border-bottom: #b7422d dashed 2px;
     margin: 5px;
+    height: 100px;
+    text-align: center;
+    align-items: center;
 }
 
 #answer {
     font-size: 20px;
     display: flex;
     align-items: space-evenly;
+}
+
+li {
+    background-color: blueviolet;
+    margin: 10px;
+    height: fit-content;
+    width: 80%;  
+    color: black
+}
+
+ol {
+    width: 100%;
+    display: none;
+}
+
+li:hover {
+  box-shadow: 5px 10px #888888;
+  cursor: grab;
 }

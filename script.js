@@ -1,73 +1,79 @@
-// psuedo: create an object that houses all the questions. shuffle that object at the beginning of each of quiz, then shuffle the choice of answers. attach the answers to the h2 value. probably use event.target to figure out selection --> container.addEventListener("click", function(event) {var element = event.target;} <-- if answer is correct award points, if wrong deduct points. if questions[i] === undefined then we display the ending message with score and allow person to add initials. Also, the whole thing will have to be set in an interval timer function
-  
-
-var quizEl = document.querySelector('#quiz')
-var questionEl = document.querySelector('#question')
-//answerEl.children to access the varying h2s??
-var answerEl = document.querySelector('#answer')
-var btnEL = document.querySelector('#btn')
+// element that houses both the question and the answer
+var quizEl = document.querySelector('#quiz');
+var questionEl = document.querySelector('#question');
+var answerEl = document.querySelector('#answer');
+var btnEL = document.querySelector('#btn');
+var timerEl = document.querySelector('#timer');
 // Create ordered list 
-var listEl = document.createElement("ol");
+var listEl = document.querySelector("#list");
 // Create ordered list items
-var li1 = document.createElement("li");
-var li2 = document.createElement("li");
-var li3 = document.createElement("li");
-var li4 = document.createElement("li");
+var li1 = document.querySelector("#li1");
+var li2 = document.querySelector("#li2");
+var li3 = document.querySelector("#li3");
+var li4 = document.querySelector("#li4");
+// variable to iterate through questionsArr
+let i = 0;
+// countdown timer for quiz
+var timer = 60;
+timerEl.textContent = `${timer} seconds remaining`;
 
-quizEl.appendChild(listEl);
-listEl.appendChild(li1);
-listEl.appendChild(li2);
-listEl.appendChild(li3);
-listEl.appendChild(li4);
 
  
 
-var questions = {
-    hey : {
-        question : 'What is 0?',
-        //can use questions[index]choices.includes(answer)
-        choices : ['8', '5', '6', 'hey'],
-        'correct answer': '2'
+var questionBank = {
+    question0 : {
+        question : 'In JavaScript, what is a block of code called that is used to perform a specific task?',
+        choices : ['Variable', 'Declaration', 'String', 'Function'],
+        'correct answer': 'Function'
     },
-    hello : {
-        question : 'What is 1?',
-        choices : ['8', '5', '6', 'hello'],
-        'correct answer': 2
+    question1 : {
+        question : 'What is the type of loop that continues through a block of code as long as the specified condition remains TRUE?',
+        choices : ['Conditional Loop ', 'For Loop', 'While Loop', 'Else Loop'],
+        'correct answer': 'While Loop'
     },
-    heytheer : {
-        question : 'What is 2?',
-        choices : ['8', '5', '6', 'heytheer'],
-        'correct answer': 2
+    question2 : {
+        question : 'What is the element called that is used to describe the set of variables, objects, and functions you explicitly have access to?',
+        choices : ['Scope', 'Range', 'Output Level', 'Restriction'],
+        'correct answer': '8'
     },
-    howdy : {
-        question : 'What is 3?',
-        choices : ['8', '5', '6', 'howdu'],
-        'correct answer': 2
+    question3 : {
+        question : 'What is the element used (and hidden) in code that explains things and makes the content more readable?',
+        choices : ['Comments', 'Comparisons', 'Quotations', 'Notes'],
+        'correct answer': 'Comments'
     },
-    aloha : {
-        question : 'What is 4?',
-        choices : ['8', '5', '6', 'aloha'],
-        'correct answer': 2
+    question4 : {
+        question : 'What kind of statement is used to execute actions based on a trigger or condition?',
+        choices : ['Regular Expression', 'Conditional Statement', 'Fired Event', 'Boolean Variable'],
+        'correct answer': 'Conditional Statement'
     },
-    bonjour : {
-        question : 'What is 5?',
-        choices : ['8', '5', '6', 'bonjour'],
-        'correct answer': 2
+    question5 : {
+        question : 'What is the name of the statement that is used to exit or end a loop?',
+        choices : ['Break statement', 'Falter statement', 'Close statement', 'Conditional statement'],
+        'correct answer': 'Break statement'
     },
-    dias : {
-        question : 'What is 6?',
-        choices : ['8', '5', '6', 'dias'],
-        'correct answer': 2
+    question6 : {
+        question : 'What is the object called that lets you work with both dates and time-related data?',
+        choices : ['Dates', 'Time-warp', 'Time field', 'Clock'],
+        'correct answer': 'Dates'
+    },
+    question7 : {
+        question : 'In JavaScript, what is used in conjunction with HTML to “react” to certain elements?',
+        choices : ['Boolean', 'RegExp', 'Condition', 'Events'],
+        'correct answer': 'Events'
+    },
+    question8 : {
+        question : 'What is the format called that is used for storing and transporting data?',
+        choices : ['JSON', 'Font', 'HTML', 'Syntax'],
+        'correct answer': 'JSON'
+    },
+    question9 : {
+        question : 'This is what you call the guide that defines coding conventions for all projects.',
+        choices : ['Style guide', 'Coding dictionary', 'Main textbook', 'Developer\'s reference'],
+        'correct answer': 'Style guide'
     }
 }
-
-var questionsArr = Object.keys(questions)
-
-var quest = questions.hey.question
-li1.textContent = quest;
-
-console.log(questionsArr);
-
+var questionsArr = Object.keys(questionBank)
+// shuffles the array thats passsed as the parameter. 
 const shuffleArray = array => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -76,23 +82,74 @@ const shuffleArray = array => {
       array[j] = temp;
     }
   }
-//shuffles all the choices. 
+
+// shuffles the keys of questionBank. 
+shuffleArray(questionsArr);
+
+// shuffles the 'choices' property of the varying questions objects. 
 for(let i = 0; i < questionsArr.length; i++){
-    shuffleArray(questions[questionsArr[i]].choices)
+    shuffleArray(questionBank[questionsArr[i]].choices)
 }
-  
 
-// this works!!! the questionsArr keeps the shuffled order after being called through the function.
- shuffleArray(questionsArr);
- console.log(questionsArr);
- console.log(questions[questionsArr[0]].choices)
+// takes the mouse click of the user as the answer to the question and matches it against 'correct answer' value
+function answerQuestion(event){
+    if (questionBank[questionsArr[i]] === undefined) {
+        return;
+    } else if (event.target.innerHTML === questionBank[questionsArr[i]]['correct answer']) {
+        console.log('true');
+    } else {
+        timer -= 5;
+        timerEl.textContent = `${timer} seconds remaining`;
+        console.log('false');
+    }
+    i++;
+    displayQuestion();
+}
 
- questionEl.textContent = questions[questionsArr[0]].question
+// displays each new question and multiple choices and looks for the event listener 'click.' Also checks each run to make sure there is another question in questionBank to go to. 
+ var displayQuestion = () => {
+    if (questionsArr[i] === undefined) {
+        gameEnd();
+        // will want to run a function that displays the end here and then sets up how to input initials for hi score.
+        return;
+    }    
+    listEl.setAttribute('style', 'display: inline-block')
+    questionEl.innerHTML = questionBank[questionsArr[i]].question;
+    li1.innerHTML = questionBank[questionsArr[i]].choices[0];
+    li2.innerHTML = questionBank[questionsArr[i]].choices[1];
+    li3.innerHTML = questionBank[questionsArr[i]].choices[2];
+    li4.innerHTML = questionBank[questionsArr[i]].choices[3]; 
 
- //now just need to write an interval function that initiates after button click with a big 'ol for loop inside that'll take the shuffled order and display the question and options. Will the for loop wait to initialize its next loop until after the user has interacted with the questions? add if statement
- // if(event.target === questions[questionsArr[0]]['correct answer']){
-     // points += 5
- //} else {
-     // points -= 5
- //}
- //i think this should work!
+    listEl.addEventListener('click', answerQuestion)    
+ }
+
+var quizStart = () => {
+
+timerEl.setAttribute('style', 'display: inline-block');
+btnEL.setAttribute('style', 'display: none');
+
+var quizTimer = setInterval(function () {
+    
+    if (timer > 0) {
+        timer--;
+        timerEl.textContent = `${timer} seconds remaining`;
+    } else {
+        clearInterval(quizTimer);
+        gameEnd();
+    }
+      }, 1000)
+
+      displayQuestion();
+
+}
+
+
+
+ btnEL.addEventListener('click', quizStart)
+
+// all that is left (aside from maybe a bit more styling) is the end of game function -- displaying that they have finished, their score, and a submit(??) button for their hiscore. will need to localStorage.getItem at the beginning of the function to have it display all the old hiscores, as well as localStorage.setItem at the end to add the new entry to the hiscores board.
+
+var gameEnd = () => {
+    quizEl.setAttribute('style', 'display: none')
+    timerEl.setAttribute('style', 'display: none')
+}
