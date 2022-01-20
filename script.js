@@ -1,3 +1,4 @@
+var bodyEl = document.querySelector('#body');
 // element that houses both the question and the answer
 var quizEl = document.querySelector('#quiz');
 var questionEl = document.querySelector('#question');
@@ -7,15 +8,19 @@ var timerEl = document.querySelector('#timer');
 // Create ordered list 
 var listEl = document.querySelector("#list");
 // Create ordered list items
+
 var li1 = document.querySelector("#li1");
 var li2 = document.querySelector("#li2");
 var li3 = document.querySelector("#li3");
 var li4 = document.querySelector("#li4");
+
 // variable to iterate through questionsArr
 let i = 0;
 // countdown timer for quiz
 var timer = 60;
 timerEl.textContent = `${timer} seconds remaining`;
+var endTrigger = '';
+var hiScoreArr = [];
 
 
  
@@ -93,14 +98,14 @@ for(let i = 0; i < questionsArr.length; i++){
 
 // takes the mouse click of the user as the answer to the question and matches it against 'correct answer' value
 function answerQuestion(event){
-    if (questionBank[questionsArr[i]] === undefined) {
-        return;
-    } else if (event.target.innerHTML === questionBank[questionsArr[i]]['correct answer']) {
+    if (event.target.innerHTML === questionBank[questionsArr[i]]['correct answer']) {
+        console.log(event.target.innerHTML);
         console.log('true');
     } else {
         timer -= 5;
         timerEl.textContent = `${timer} seconds remaining`;
         console.log('false');
+        console.log(event.target.innerHTML);
     }
     i++;
     displayQuestion();
@@ -109,6 +114,7 @@ function answerQuestion(event){
 // displays each new question and multiple choices and looks for the event listener 'click.' Also checks each run to make sure there is another question in questionBank to go to. 
  var displayQuestion = () => {
     if (questionsArr[i] === undefined) {
+        endTrigger = 'time';
         gameEnd();
         // will want to run a function that displays the end here and then sets up how to input initials for hi score.
         return;
@@ -120,7 +126,7 @@ function answerQuestion(event){
     li3.innerHTML = questionBank[questionsArr[i]].choices[2];
     li4.innerHTML = questionBank[questionsArr[i]].choices[3]; 
 
-    listEl.addEventListener('click', answerQuestion)    
+    lineEl.addEventListener('click', answerQuestion)
  }
 
 var quizStart = () => {
@@ -130,7 +136,9 @@ btnEL.setAttribute('style', 'display: none');
 
 var quizTimer = setInterval(function () {
     
-    if (timer > 0) {
+    if (questionsArr[i] === undefined) {
+        clearInterval(quizTimer);
+    } else if (timer > 0) {
         timer--;
         timerEl.textContent = `${timer} seconds remaining`;
     } else {
@@ -150,6 +158,34 @@ var quizTimer = setInterval(function () {
 // all that is left (aside from maybe a bit more styling) is the end of game function -- displaying that they have finished, their score, and a submit(??) button for their hiscore. will need to localStorage.getItem at the beginning of the function to have it display all the old hiscores, as well as localStorage.setItem at the end to add the new entry to the hiscores board.
 
 var gameEnd = () => {
-    quizEl.setAttribute('style', 'display: none')
-    timerEl.setAttribute('style', 'display: none')
+    quizEl.setAttribute('style', 'display: none');
+    timerEl.setAttribute('style', 'display: none');
+    endDisplay();
 }
+
+var endDisplay = () => {
+    // divEl
+    h1El = document.createElement('h1');
+    endBtnEl = document.createElement('button');
+    bodyEl.appendChild(h1El);
+    bodyEl.appendChild(endBtnEl);
+    console.log(endTrigger)
+    if (endTrigger == 'time') {
+        h1El.innerHTML = 'Congratulations!! You have completed the code quiz with time to spare! Your score is based on how many seconds you had remaining.'
+    } else {
+        h1El.innerHTML = 'Uh oh. You ran out of time.'
+    }
+}
+
+var hiScore = () => {
+    JSON.parse(localStorage.getItem('hiScoreArr'))
+
+    var score = timer;
+    var initials = document.querySelector("#initials").value;
+    // push the hiscores variables into an array to not overwrite each hiscore everytime
+    hiScoreArr.push(initials + ' - ' + score)
+
+    localStorage.setItem('score', JSON.stringify(score))
+
+}
+
