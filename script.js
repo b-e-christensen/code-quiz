@@ -96,3 +96,5 @@ for(let i = 0; i < questionsArr.length; i++){
      // points -= 5
  //}
  //i think this should work!
+
+ // i think the bones of this is here. the comment on line 92 though i think is correct -- 
