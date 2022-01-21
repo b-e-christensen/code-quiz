@@ -1,15 +1,19 @@
 body {
-    background-color: #b7422d;
-}
-
+    background-color: #333;
+} 
 main {
     width: 100%;
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    height: 100%;
+    background-color: #333;
+    display: grid;
+    place-items: center;
+    margin-top: 10%;
+}
 
+#timer {
+    font-size: 25px;
+    display: none;
+    position: relative;
 }
 
 #quiz {
@@ -17,18 +21,49 @@ main {
     background-color: #8bbef3;
     color: #b7422d;
     height: 300px;
-    width: 300px;
-
+    width: 500px;
 }
 
 #question {
+    display: flex;
     font-size: 25px;
     border-bottom: #b7422d dashed 2px;
     margin: 5px;
+    height: 100px;
+    text-align: center;
+    align-items: center;
 }
 
 #answer {
     font-size: 20px;
     display: flex;
     align-items: space-evenly;
+}
+
+button {
+    position: relative;
+}
+
+li {
+    /* background-color: rgb(183, 66, 45); */
+    margin: 10px;
+    height: fit-content;
+    width: 100%;  
+    color: black
+}
+
+ol {
+    /* width: 100%; */
+    display: none;
+}
+
+li:hover {
+    box-shadow: 0px 0px 5px #fff;
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+#formBtn {
+    display: none;
 }
