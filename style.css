@@ -43,16 +43,22 @@ li {
     /* background-color: rgb(183, 66, 45); */
     margin: 10px;
     height: fit-content;
-    width: fit-content;  
+    width: 100%;  
     color: black
 }
 
 ol {
-    width: 100%;
+    /* width: 100%; */
     display: none;
 }
 
 li:hover {
     box-shadow: 0px 0px 5px #fff;
+    cursor: move;
+    cursor: -webkit-grab;
     cursor: grab;
+}
+
+#formBtn {
+    display: none;
 }
