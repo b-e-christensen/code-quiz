@@ -18,6 +18,18 @@ let i = 0;
 var timer = 60;
 timerEl.textContent = `${timer} seconds remaining`;
 var endTrigger = '';
+var hiScoreViewer = document.querySelector('#hiscore-viewer')
+var hiScoreListDivEl = document.querySelector('#hiscore-list-div');
+var mainEl = document.querySelector('#main');
+
+var hiScoreArr = JSON.parse(localStorage.getItem('hiScoreArr'));
+
+var scoreSplice = [];
+var scoreInOrder = [];
+var scoreCompare = [];
+var scoreList = [];
+
+
 
 
 var questionBank = [
@@ -154,43 +166,91 @@ var quizTimer = setInterval(function () {
 // all that is left (aside from maybe a bit more styling) is the end of game function -- displaying that they have finished, their score, and a submit(??) button for their hiscore. will need to localStorage.getItem at the beginning of the function to have it display all the old hiscores, as well as localStorage.setItem at the end to add the new entry to the hiscores board.
 
 var gameEnd = () => {
+    // revisit line 160 here. might be a better thing to turn to display none
     quizEl.setAttribute('style', 'display: none');
     timerEl.setAttribute('style', 'display: none');
     endDisplay();
 }
 
-var endDisplay = () => {
+function endDisplay() {
     h1El = document.createElement('h1');
     bodyEl.appendChild(h1El);
     var submitEl = document.querySelector('#formBtn');
     submitEl.setAttribute('style', 'display: inline')
+    var score = timer;
     if (endTrigger === 'time') {
-        h1El.innerHTML = 'Congratulations!! You have completed the code quiz with time to spare! Your score is based on how many seconds you had remaining.'
+        h1El.innerHTML = `Congratulations!! You have completed the code quiz with time to spare! Your score is based on how many seconds you had remaining - which was: ${score}. Enter your initials to put it into your HiScores. Refresh the page to see updated HiScores, or to play again!`
     } else {
-        h1El.innerHTML = 'Uh oh. You ran out of time. You can still record your score and keep track of your progress.'
+        h1El.innerHTML = 'Uh oh. You ran out of time. You can still record your score (which is a big \'ol goose egg unfortunately) and keep track of your progress. Refresh the page to see updated HiScores, or to play again!'
     }
     submitEl.addEventListener("submit", hiScore);
 }
 
-var hiScore = (event) => {
+function hiScore(event) {
     event.preventDefault();
     // for first use on a machine -- creates an array to push to on the local storage.
     if(localStorage.getItem('hiScoreArr') === null){
         localStorage.setItem('hiScoreArr', JSON.stringify([]))
     }
-
     var hiScoreArr = JSON.parse(localStorage.getItem('hiScoreArr'));
-    console.log(`getItem after establishing if statement: ${hiScoreArr}`);
-
     var score = timer;
     var initials = document.querySelector("#initials");
 
-    hiScoreArr.push(initials.value + ' - ' + score);
+    hiScoreArr.push({initials: initials.value, score: score});
     initials.setAttribute('style', 'display: none');
 
     localStorage.setItem('hiScoreArr', JSON.stringify(hiScoreArr));
-
-    // push the hiscores variables into an array to not overwrite each hiscore everytime
-
-
 }
+
+function scoreGrab() {
+    if(localStorage.getItem('hiScoreArr') === null){
+        return;
+    }
+    for (let i = 0; i < hiScoreArr.length; i++) {
+        const element = hiScoreArr[i].score;
+        scoreSplice.push(element);
+        scoreCompare.push(element);
+    }
+    console.log(scoreSplice);
+
+    for (let j = 0; j < hiScoreArr.length; j++) {
+    var max = scoreSplice.reduce(function(a, b) {
+            return Math.max(a, b);
+        }, 0);
+        scoreInOrder.push(max);
+        var spliceIndex = scoreSplice.indexOf(max);
+        scoreSplice.splice(spliceIndex, 1);
+        }
+        for (let k = 0; k < scoreInOrder.length; k++) {
+            const element = scoreInOrder[k];
+            scoreList.push(scoreCompare.indexOf(element)); 
+        }
+}
+
+console.log(hiScoreArr);
+scoreGrab();
+console.log(scoreSplice)
+console.log(scoreCompare);
+console.log(scoreInOrder.join);
+console.log(scoreList);
+
+// use the scoreCompare array to be a capture the indexes of the original hiScoreArr obj as they have come in. scoreInOrder array is after they have been sorted from highest to lowest. Since the scoreCompare is in the original order we can use that as the reference. I.e. if the score 22 is indexed at 4 in scoreCompare, its corresponding initials property would be indexed at 4 in the original obj as well. 
+
+hiScoreViewer.addEventListener('mouseover', function () {
+    var newList = document.createElement('ol')
+    newList.id = 'hiscore-list';
+    hiScoreListDivEl.appendChild(newList)
+    for (let i = 0; i < scoreList.length; i++) {
+        const element = scoreList[i];
+        var listInitials = hiScoreArr[element].initials
+        var listScore = hiScoreArr[element].score;
+        var newLine = document.createElement('li');
+        newLine.innerHTML = `${listInitials} - ${listScore}`
+        newList.appendChild(newLine)
+    }
+  })
+
+  hiScoreViewer.addEventListener('mouseleave', function () {
+    var removeThis = document.querySelector('#hiscore-list')
+    removeThis.remove()
+})

@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body id="body">
-    <div id="hiscore-list">View Hiscores</div>
-    <main>
+    <div id="hiscore-viewer">View HiScores</div>
+    <main id="main">
+        <div id="hiscore-list-div">
+            <!-- <ol id="hiscore-list"></ol> -->
+        </div>
+        <section id="main-div">
     <div id="timer"></div>
     <div id="quiz">
         <h1 id="question">You are about to take a code quiz! Buckle up! Hit the button to start.</h1>
-
         <div id="answer" >
             <ol id="list" >
                 <li id="li1"></li>
@@ -30,6 +33,7 @@
         </form>
     </div>
     <button id="btn">Start</button>
+        </section>
     </main>
     <script async src="./script.js"></script>
 </body>
