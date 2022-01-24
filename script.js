@@ -1,5 +1,4 @@
 var bodyEl = document.querySelector('#body');
-// element that houses both the question and the answer
 var quizEl = document.querySelector('#quiz');
 var questionEl = document.querySelector('#question');
 var answerEl = document.querySelector('#answer');
@@ -24,14 +23,13 @@ var mainEl = document.querySelector('#main');
 
 var hiScoreArr = JSON.parse(localStorage.getItem('hiScoreArr'));
 
+// varying blank arrays used to create the hiscore list.
 var scoreSplice = [];
 var scoreInOrder = [];
 var scoreCompare = [];
 var scoreList = [];
 
-
-
-
+// array of objects that hold the questions, their choices, and the correct answer
 var questionBank = [
     {
         question : 'In JavaScript, what is a block of code called that is used to perform a specific task?',
@@ -104,14 +102,9 @@ for(let i = 0; i < questionBank.length; i++){
 
 // takes the mouse click of the user as the answer to the question and matches it against 'correct answer' value
 function answerQuestion(event){
-    if (event.target.innerHTML === questionBank[i]['correct answer']) {
-        console.log(event.target.innerHTML);
-        console.log('true');
-    } else {
+    if (event.target.innerHTML !== questionBank[i]['correct answer']){
         timer -= 5;
         timerEl.textContent = `${timer} seconds remaining`;
-        console.log('false');
-        console.log(event.target.innerHTML);
     }
     i++;
     displayQuestion();
@@ -120,15 +113,14 @@ function answerQuestion(event){
 
   
 // displays each new question and multiple choices and looks for the event listener 'click.' Also checks each run to make sure there is another question in questionBank to go to. 
-
- var displayQuestion = () => {
-
+ function displayQuestion() {
+    // end the game if no more questions remain
     if (questionBank[i] === undefined) {
         endTrigger = 'time';
         gameEnd();
-        // will want to run a function that displays the end here and then sets up how to input initials for hi score.
         return;
     }    
+
     listEl.setAttribute('style', 'display: inline-block')
     questionEl.innerHTML = questionBank[i].question;
     li1.innerHTML = questionBank[i].choices[0];
@@ -139,7 +131,7 @@ function answerQuestion(event){
     listEl.addEventListener('click', answerQuestion)
  }
 
-var quizStart = () => {
+function quizStart() {
 
 timerEl.setAttribute('style', 'display: inline-block');
 btnEL.setAttribute('style', 'display: none');
@@ -163,10 +155,7 @@ var quizTimer = setInterval(function () {
 
  btnEL.addEventListener('click', quizStart)
 
-// all that is left (aside from maybe a bit more styling) is the end of game function -- displaying that they have finished, their score, and a submit(??) button for their hiscore. will need to localStorage.getItem at the beginning of the function to have it display all the old hiscores, as well as localStorage.setItem at the end to add the new entry to the hiscores board.
-
-var gameEnd = () => {
-    // revisit line 160 here. might be a better thing to turn to display none
+function gameEnd() {
     quizEl.setAttribute('style', 'display: none');
     timerEl.setAttribute('style', 'display: none');
     endDisplay();
@@ -202,6 +191,7 @@ function hiScore(event) {
     localStorage.setItem('hiScoreArr', JSON.stringify(hiScoreArr));
 }
 
+// pushes the score property of the questionBank objects into two arrays. one of those arrays serves as the map for the order of the lcoal storage array - the other gets run through a for loop, each loop finding the max number and splicing it into a new array. then compare the two arrays and find how to properly call the original object to have it list highest core to lowest.
 function scoreGrab() {
     if(localStorage.getItem('hiScoreArr') === null){
         return;
@@ -211,7 +201,6 @@ function scoreGrab() {
         scoreSplice.push(element);
         scoreCompare.push(element);
     }
-    console.log(scoreSplice);
 
     for (let j = 0; j < hiScoreArr.length; j++) {
     var max = scoreSplice.reduce(function(a, b) {
@@ -227,14 +216,7 @@ function scoreGrab() {
         }
 }
 
-console.log(hiScoreArr);
 scoreGrab();
-console.log(scoreSplice)
-console.log(scoreCompare);
-console.log(scoreInOrder.join);
-console.log(scoreList);
-
-// use the scoreCompare array to be a capture the indexes of the original hiScoreArr obj as they have come in. scoreInOrder array is after they have been sorted from highest to lowest. Since the scoreCompare is in the original order we can use that as the reference. I.e. if the score 22 is indexed at 4 in scoreCompare, its corresponding initials property would be indexed at 4 in the original obj as well. 
 
 hiScoreViewer.addEventListener('mouseover', function () {
     var newList = document.createElement('ol')
