@@ -236,3 +236,4 @@ hiScoreViewer.addEventListener('mouseover', function () {
     var removeThis = document.querySelector('#hiscore-list')
     removeThis.remove()
 })
+
