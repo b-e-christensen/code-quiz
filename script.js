@@ -28,6 +28,7 @@ var scoreSplice = [];
 var scoreInOrder = [];
 var scoreCompare = [];
 var scoreList = [];
+// new comment
 
 // array of objects that hold the questions, their choices, and the correct answer
 var questionBank = [
